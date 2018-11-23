@@ -11,7 +11,7 @@ class BaseConfig:
 
 class DevelopmentConfig:
     """Development Configuration"""
-    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    #SQLALCHEMY_TRACK_MODIFICATIONS = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
 
 class TestingConfig:
