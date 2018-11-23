@@ -8,7 +8,9 @@ from project import create_app, db
 from project.api.models import User
 
 app = create_app()
+#app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 cli = FlaskGroup(create_app=create_app)
+
 
 @cli.command()
 def recreate_db():
