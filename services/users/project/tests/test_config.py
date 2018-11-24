@@ -1,12 +1,13 @@
 # services/users/project/tests/test_config.py
 
+
 import os
 import unittest
 
 from flask import current_app
 from flask_testing import TestCase
 
-from project import app
+from project import create_app
 
 app = create_app()
 
@@ -20,9 +21,10 @@ class TestDevelopmentConfig(TestCase):
         self.assertTrue(app.config['SECRET_KEY'] == 'secret_key')
         self.assertFalse(current_app is None)
         self.assertTrue(
-                app.config['SQLALCHEMY_DATABASE_URI'] ==
-                os.environ.get('DATABASE_URL')
+            app.config['SQLALCHEMY_DATABASE_URI'] ==
+            os.environ.get('DATABASE_URL')
         )
+
 
 class TestTestingConfig(TestCase):
     def create_app(self):
@@ -31,12 +33,13 @@ class TestTestingConfig(TestCase):
 
     def test_app_is_testing(self):
         self.assertTrue(app.config['SECRET_KEY'] == 'secret_key')
-        self.assetTrue(app.config['TESTING'])
+        self.assertTrue(app.config['TESTING'])
         self.assertFalse(app.config['PRESERVE_CONTEXT_ON_EXCEPTION'])
         self.assertTrue(
-                app.config['SQLALCHEMY_DATABASE_URL'] ==
-                os.environ.get('DATABASE_TEST_URL')
+            app.config['SQLALCHEMY_DATABASE_URI'] ==
+            os.environ.get('DATABASE_TEST_URL')
         )
+
 
 class TestProductionConfig(TestCase):
     def create_app(self):
@@ -50,4 +53,3 @@ class TestProductionConfig(TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
