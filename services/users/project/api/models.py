@@ -1,6 +1,5 @@
 # services/ users/project/api/models.py
 
-from flask import current_app
 
 from sqlalchemy.sql import func
 
