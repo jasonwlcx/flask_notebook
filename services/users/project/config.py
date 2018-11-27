@@ -9,20 +9,25 @@ class BaseConfig:
     TESTING = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     SECRET_KEY = 'secret_key'
+    DEBUG_TB_ENABLED = False
+    DEBUG_TB_INTERCEPT_REDIRECTS = False
 
 
-class DevelopmentConfig:
+class DevelopmentConfig(BaseConfig):
     """Development Configuration"""
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
-    SECRET_KEY = os.environ.get('SECRET_KEY')
+    DEBUG_TB_ENABLED = True
 
 
-class TestingConfig:
+class TestingConfig(BaseConfig):
     """Testing Configuration"""
     TESTING = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_TEST_URL')
 
 
-class ProductionConfig:
+class ProductionConfig(BaseConfig):
     """Production Configuration"""
     SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+
+
+
