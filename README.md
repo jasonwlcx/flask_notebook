@@ -1,3 +1,5 @@
 # flask notebook
 
-[![Build Status](https://travis-ci.org/jasonwlcx/flask_notebook.svg?branch=master)](https://travis-ci.org/jasonwlcx/flask_notebook)
+[![Build Status](http://builds.mini-super.com:8080/job/flask_notebook/badge/icon)](http://builds.mini-super.com:8080/job/flask_notebook/)
+
+statuses
