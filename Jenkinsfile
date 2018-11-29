@@ -11,7 +11,7 @@ void setBuildStatus(String message, String state) {
 pipeline {
    agent any
        environment {
-         npm_config_cache = 'npm-cache',
+         npm_config_cache = 'npm-cache'
          HOME = '.'
        }
        stages {
