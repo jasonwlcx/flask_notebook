@@ -3,7 +3,7 @@
 ###########
 
 # base image
-FROM node:10.13.0-alpine as builder
+FROM node:10.14.0-alpine as builder
 
 # set working directory
 WORKDIR /usr/src/app
@@ -11,8 +11,8 @@ WORKDIR /usr/src/app
 # insall app dependencies
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
 COPY package.json /usr/src/app/package.json
-RUN npm install
-RUN npm install react-scripts@latest -g
+RUN npm install --verbose
+RUN npm install react-scripts@latest -g --verbose
 
 # set environment variables
 ARG REACT_APP_USERS_SERVICE_URL
