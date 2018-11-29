@@ -12,7 +12,7 @@ COPY package.json /usr/src/app/package.json
 RUN mkdir /.npm && chmod 777 /.npm
 # Update to latest version so optional dependancies + shrinkwrap work
 RUN npm install -g npm@6.4.1
-RUN npm install react-scripts@latest
+RUN npm install -g react-scripts@latest
 
 # start app
 CMD ["npm", "start"]
