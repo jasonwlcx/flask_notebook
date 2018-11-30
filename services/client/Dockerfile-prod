@@ -19,11 +19,11 @@ ENV NODE_ENV $NODE_ENV
 
 # insall app dependencies
 COPY package.json /usr/src/app/package.json
-RUN cd /usr/src/app && \
-    npm set progress=false && \
-    npm config set depth 0 && \
-    npm install --silent --only=production react-scripts@latest && \
-    npm install --only=production --silent npm@latest
+#RUN cd /usr/src/app && \
+#    npm set progress=false && \
+#    npm config set depth 0 && \
+#    npm install --silent --only=production react-scripts@latest && \
+#    npm install --only=production --silent npm@latest
 
 # create build
 COPY . /usr/src/app

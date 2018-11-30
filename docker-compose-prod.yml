@@ -28,17 +28,22 @@ services:
       - POSTGRES_PASSWORD=postgres
 
   client:
+    volumes: npm-cache:/root/.npm
+    command: npm run install-start
     container_name: client
     build:
       context: ./services/client
       dockerfile: Dockerfile-prod
       args:
-        - NODE_ENV=production
+        - NODE_ENV=development
         - REACT_APP_USERS_SERVICE_URL=http://localhost
     ports:
       - '3007:80'
     depends_on:
       - users
+  volumes:
+  npm-cache:
+    external: false
 
   nginx:
     build:
