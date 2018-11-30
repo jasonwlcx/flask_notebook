@@ -43,10 +43,6 @@ services:
     depends_on:
       - users
 
-volumes:
-  npm-cache:
-    external: false
-
   nginx:
     build:
       context: ./services/nginx
