@@ -53,3 +53,7 @@ services:
     depends_on:
       - users
       - client
+
+volumes:
+  npm-cache:
+    external: false
