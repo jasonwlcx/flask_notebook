@@ -21,7 +21,7 @@ COPY package.json /usr/src/app/package.json
 COPY package.json /root/package.json
 RUN chmod -R 777 /usr/src
 RUN mkdir /root/.npm && chmod 777 /root/.npm
-RUN npm install --verbose react-scripts && npm install --verbose npm@6.4.1
+RUN npm install --verbose --only=dev react-scripts && npm install --verbose --only=dev npm@6.4.1
 
 # create build
 COPY . /usr/src/app
