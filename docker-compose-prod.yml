@@ -41,9 +41,6 @@ services:
       - '3007:80'
     depends_on:
       - users
-  volumes:
-  npm-cache:
-    external: false
 
   nginx:
     build:
