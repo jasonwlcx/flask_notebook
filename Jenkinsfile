@@ -11,7 +11,7 @@ void setBuildStatus(String message, String state) {
 pipeline {
    agent any
        environment {
-         npm_config_cache = 'npm-cache'
+         npm_config_cache=npm-cache
          HOME = '.'
        }
        stages {
@@ -30,18 +30,18 @@ pipeline {
     	    stage ('Build') {
               steps {
                   sh """
-                    docker-compose -f docker-compose-dev.yml rm -f && \
-                    docker-compose -f docker-compose-dev.yml pull --include-deps && \
-                    docker-compose -f docker-compose-dev.yml up --build -d
+                    docker-compose -f docker-compose-prod.yml rm -f && \
+                    docker-compose -f docker-compose-prod.yml pull --include-deps && \
+                    docker-compose -f docker-compose-prod.yml up --build -d
                   """
               }
           } // end of Build Stage
           stage ('Test') {
               steps {
                 sh """
-                    docker-compose -f docker-compose-dev.yml run users python manage.py test
-                    docker-compose -f docker-compose-dev.yml run users flake8 project
-                    docker-compose -f docker-compose-dev.yml run client npm test
+                    docker-compose -f docker-compose-prod.yml run users python manage.py test
+                    docker-compose -f docker-compose-prod.yml run users flake8 project
+                    docker-compose -f docker-compose-prod.yml run client npm test
                 """
               }
           } // end of Test Stage
@@ -67,9 +67,9 @@ pipeline {
             failure {
                 setBuildStatus("Build failed", "FAILURE");
                 sh """
-                docker-compose -f docker-compose-dev.yml down && \
-                docker-compose -f docker-compose-dev.yml stop -t 1 && \
-                docker-compose -f docker-compose-dev.yml rm -f
+                docker-compose -f docker-compose-prod.yml down && \
+                docker-compose -f docker-compose-prod.yml stop -t 1 && \
+                docker-compose -f docker-compose-prod.yml rm -f
                 """
             }
         } // end post
