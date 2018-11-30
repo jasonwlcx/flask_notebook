@@ -22,7 +22,8 @@ COPY package.json /usr/src/app/package.json
 RUN cd /usr/src/app && \
     #npm set progress=false && \
     npm config set depth 0 && \
-    npm install --only-production react-scripts@latest && \
+    npm install --only-production react-scripts@latest
+    # && \
     #npm install --only-production --verbose npm@latest
 
 # create build
