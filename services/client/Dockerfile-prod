@@ -9,14 +9,17 @@ FROM node:10.14.0-alpine as builder
 WORKDIR /usr/src/app
 
 # set environment variables
-ENV NODE_ENV development
+# ENV NODE_ENV development
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
 ENV REACT_APP_USERS_SERVICE_URL http://localhost
 
 # insall app dependencies
 COPY package.json /usr/src/app/package.json
-RUN cd /usr/src/app && npm install --verbose --global react-scripts@latest
-RUN cd /usr/src/app && npm install --verbose --global npm@latest
+RUN cd /usr/src/app && \
+    npm set progress=false && \
+    npm config set depth 0 && \
+    npm install --only-production react-scripts@latest && \
+    npm install --only-productionnpm@latest
 
 # create build
 COPY . /usr/src/app
