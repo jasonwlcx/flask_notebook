@@ -29,6 +29,8 @@ services:
 
   client:
     volumes: npm-cache:/root/.npm
+      npm-cache:
+        external: false
     command: npm run install-start
     container_name: client
     build:
