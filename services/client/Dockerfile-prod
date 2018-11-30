@@ -7,7 +7,6 @@ FROM node:10.14.0-alpine as builder
 
 # set working directory
 WORKDIR /usr/src/app
-RUN chmod -R 777 /usr/src
 
 # insall app dependencies
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
@@ -18,9 +17,6 @@ ENV REACT_APP_USERS_SERVICE_URL http://localhost
 
 
 COPY package.json /usr/src/app/package.json
-COPY package.json /root/package.json
-RUN chmod -R 777 /usr/src
-RUN mkdir /root/.npm && chmod 777 /root/.npm
 RUN npm install --verbose --only=dev react-scripts && npm install --verbose --only=dev npm@6.4.1
 
 # create build
