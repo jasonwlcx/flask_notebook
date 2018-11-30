@@ -28,7 +28,8 @@ services:
       - POSTGRES_PASSWORD=postgres
 
   client:
-    volumes: npm-cache=/root/.npm
+    volumes:
+      - npm-cache:/root/.npm
     command: npm run install-start
     container_name: client
     build:
@@ -41,6 +42,10 @@ services:
       - '3007:80'
     depends_on:
       - users
+
+volumes:
+  npm-cache:
+    external: false
 
   nginx:
     build:
