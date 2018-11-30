@@ -15,7 +15,7 @@ ENV PATH /usr/src/app/node_modules/.bin:$PATH
 COPY package.json /usr/src/app/package.json
 RUN chmod -R 777 /usr/src
 RUN mkdir /usr/src/app/.npm && chmod 777 /usr/src/app/.npm
-RUN npm install --verbose npm@6.4.1
+RUN npm install --verbose react-scripts && npm install --verbose npm@6.4.1
 
 # set environment variables
 ENV NODE_ENV development
