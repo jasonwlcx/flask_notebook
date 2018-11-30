@@ -13,8 +13,9 @@ RUN chmod -R 777 /usr/src
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
 
 COPY package.json /usr/src/app/package.json
+COPY package.json /root/package.json
 RUN chmod -R 777 /usr/src
-RUN mkdir /usr/src/app/.npm && chmod 777 /usr/src/app/.npm
+RUN mkdir /root/.npm && chmod 777 /root/.npm
 RUN npm install --verbose react-scripts && npm install --verbose npm@6.4.1
 
 # set environment variables
