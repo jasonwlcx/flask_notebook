@@ -23,7 +23,7 @@ RUN cd /usr/src/app && \
     #npm set progress=false && \
     npm config set depth 0 && \
     npm install --only-production --verbose react-scripts@latest && \
-    npm install --only-production --verbose npm@latest
+    #npm install --only-production --verbose npm@latest
 
 # create build
 COPY . /usr/src/app
