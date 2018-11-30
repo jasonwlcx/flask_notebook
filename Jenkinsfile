@@ -67,7 +67,7 @@ pipeline {
             failure {
                 setBuildStatus("Build failed", "FAILURE");
                 sh """
-                docker-compose -f docker-compose-prod.yml down && \
+                #docker-compose -f docker-compose-prod.yml down && \
                 #docker-compose -f docker-compose-prod.yml stop -t 1 && \
                 #docker-compose -f docker-compose-prod.yml rm -f
                 """
