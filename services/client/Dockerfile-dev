@@ -3,16 +3,16 @@ FROM node:10.14.0-alpine
 
 # set working directory
 WORKDIR /usr/src/app
+RUN chmod -R 777 /usr/src
 
 # add `/usr/src/app/node_modules/.bin` to $PATH
 ENV PATH /usr/src/app/node_modules/.bin:$PATH
 
 #install and cache app dependencies
 COPY package.json /usr/src/app/package.json
-RUN mkdir /.npm && chmod 777 /.npm
-# Update to latest version so optional dependancies + shrinkwrap work
-RUN npm install -g npm@6.4.1
-RUN npm install -g react-scripts@2.1.1
+RUN chmod -R 777 /usr/src
+RUN npm install npm@6.4.1
+RUN npm install react-scripts@2.1.1
 
 # start app
 CMD ["npm", "start"]
