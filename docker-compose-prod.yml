@@ -33,7 +33,7 @@ services:
       context: ./services/client
       dockerfile: Dockerfile-prod
       args:
-        - NODE_ENV=production
+        - NODE_ENV=development
         - REACT_APP_USERS_SERVICE_URL=http://localhost
     ports:
       - '3007:80'
