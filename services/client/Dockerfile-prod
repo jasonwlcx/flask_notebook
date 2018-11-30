@@ -15,8 +15,8 @@ ENV REACT_APP_USERS_SERVICE_URL http://localhost
 
 # insall app dependencies
 COPY package.json /usr/src/app/package.json
-RUN npm install --verbose --only=dev --global react-scripts@latest
-RUN npm install --verbose --only=dev --global npm@latest
+RUN npm install --verbose --global react-scripts@latest
+RUN npm install --verbose --global npm@latest
 
 # create build
 COPY . /usr/src/app
