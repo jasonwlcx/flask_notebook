@@ -30,7 +30,6 @@ services:
   client:
     volumes:
       - npm-cache:/root/.npm
-    command: npm run install-start
     container_name: client
     build:
       context: ./services/client

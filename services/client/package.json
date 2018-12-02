@@ -9,8 +9,7 @@
     "react-scripts": "2.1.1"
   },
   "scripts": {
-    "start": "node server",
-    "install-start": "npm install && npm install react-scripts && npm start && react-scripts start",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
