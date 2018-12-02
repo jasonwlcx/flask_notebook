@@ -41,7 +41,6 @@ pipeline {
                 sh """
                     docker-compose -f docker-compose-prod.yml run users python manage.py test
                     docker-compose -f docker-compose-prod.yml run users flake8 project
-                    docker-compose -f docker-compose-prod.yml run client npm test
                 """
               }
           } // end of Test Stage
