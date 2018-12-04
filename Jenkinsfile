@@ -71,8 +71,6 @@ pipeline {
                 setBuildStatus("Build complete", "SUCCESS");
                 sh """
                 docker-compose -f docker-compose-prod.yml down
-                docker images --no-trunc | grep 'flask' | awk '{ print $3 }' | xargs -r docker rmi
-                docker images --no-trunc | grep -Ee 'python|postgres|nginx|node' | awk '{ print $3 }' | xargs -r docker rmi
                 """
             }
             failure {
