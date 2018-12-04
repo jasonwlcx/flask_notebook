@@ -71,13 +71,15 @@ pipeline {
                 setBuildStatus("Build complete", "SUCCESS");
                 sh """
                 docker-compose -f docker-compose-prod.yml down
+                #docker images --no-trunc | grep "${JOB_NAME}" | awk '{ print $3 }' | xargs -r docker rmi
+                docker images --no-trunc | grep -Ee 'python|postgres|nginx|node' | awk '{ print $3 }' | xargs -r docker rmi
                 """
             }
             failure {
                 setBuildStatus("Build failed", "FAILURE");
                 sh """
                 docker-compose -f docker-compose-prod.yml down
-                docker images --no-trunc | grep 'flask' | awk '{ print $3 }' | xargs -r docker rmi
+                #docker images --no-trunc | grep "${JOB_NAME}" | awk '{ print $3 }' | xargs -r docker rmi
                 """
             }
         } // end post
