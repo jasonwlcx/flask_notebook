@@ -13,6 +13,7 @@ pipeline {
        environment {
          npm_config_cache='npm-cache'
          HOME = '.'
+         DOCKER_CONFIG=$JENKINS_HOME/.docker
        }
        stages {
           stage ('Checkout') {
@@ -62,13 +63,18 @@ pipeline {
        post {
             success {
                 setBuildStatus("Build complete", "SUCCESS");
+                sh """
+                docker-compose -f docker-compose-prod.yml down && \
+                docker-compose -f docker-compose-prod.yml stop -t 1 && \
+                docker-compose -f docker-compose-prod.yml rm -f
+                """
             }
             failure {
                 setBuildStatus("Build failed", "FAILURE");
                 sh """
-                #docker-compose -f docker-compose-prod.yml down && \
-                #docker-compose -f docker-compose-prod.yml stop -t 1 && \
-                #docker-compose -f docker-compose-prod.yml rm -f
+                docker-compose -f docker-compose-prod.yml down && \
+                docker-compose -f docker-compose-prod.yml stop -t 1 && \
+                docker-compose -f docker-compose-prod.yml rm -f
                 """
             }
         } // end post
