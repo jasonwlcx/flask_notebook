@@ -46,6 +46,10 @@ pipeline {
               }
               steps {
                 sh """
+                    docker tag python:3.6.5-alpine 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:python3.6.5-alpine_"${BUILD_TAG}"
+                    docker tag postgres:10.4-alpine 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:postgres10.4-alpine_"${BUILD_TAG}"
+                    docker tag nginx:1.15.0-alpine 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:nginx1.15.0-alpine_"${BUILD_TAG}"
+                    docker tag node:10.14.0-alpine 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:node10.14.0-alpine_"${BUILD_TAG}"
                     docker tag flask_notebook_nginx:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:nginx_"${BUILD_TAG}"
                     docker tag flask_notebook_client:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:client_"${BUILD_TAG}"
                     docker tag flask_notebook_users:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:users_"${BUILD_TAG}"
@@ -54,6 +58,10 @@ pipeline {
                     docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:client_"${BUILD_TAG}"
                     docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:users_"${BUILD_TAG}"
                     docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:users-db_"${BUILD_TAG}"
+                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:python3.6.5-alpine_"${BUILD_TAG}"
+                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:postgres10.4-alpine_"${BUILD_TAG}"
+                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:nginx1.15.0-alpine_"${BUILD_TAG}"
+                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:node10.14.0-alpine_"${BUILD_TAG}"
                 """
               }
     	    }
@@ -62,13 +70,16 @@ pipeline {
             success {
                 setBuildStatus("Build complete", "SUCCESS");
                 sh """
-                    docker-compose -f docker-compose-prod.yml down
+                docker-compose -f docker-compose-prod.yml down
+                docker images --no-trunc | grep "${JOB_NAME}" | awk '{ print $3 }' | xargs -r docker rmi
+                docker images --no-trunc | grep -Ee 'python|postgres|nginx|node' | awk '{ print $3 }' | xargs -r docker rmi
                 """
             }
             failure {
                 setBuildStatus("Build failed", "FAILURE");
                 sh """
-                    docker-compose -f docker-compose-prod.yml down
+                docker-compose -f docker-compose-prod.yml down
+                docker images --no-trunc | grep "${JOB_NAME}" | awk '{ print $3 }' | xargs -r docker rmi
                 """
             }
         } // end post
