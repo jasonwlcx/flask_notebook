@@ -36,7 +36,7 @@ services:
       dockerfile: Dockerfile-prod
       args:
         - NODE_ENV=production
-        - REACT_APP_USERS_SERVICE_URL=http://localhost
+        - REACT_APP_USERS_SERVICE_URL=http://builds.mini-super.com
     ports:
       - '3007:80'
     depends_on:
