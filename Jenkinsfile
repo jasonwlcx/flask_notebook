@@ -13,7 +13,7 @@ pipeline {
        environment {
          npm_config_cache='npm-cache'
          HOME = '.'
-         DOCKER_CONFIG=$JENKINS_HOME/.docker
+         DOCKER_CONFIG="${JENKINS_HOME}/.docker"
        }
        stages {
           stage ('Checkout') {
