@@ -28,13 +28,15 @@ services:
       - POSTGRES_PASSWORD=postgres
 
   client:
+    volumes:
+      - npm-cache:/root/.npm
     container_name: client
     build:
       context: ./services/client
       dockerfile: Dockerfile-prod
       args:
         - NODE_ENV=production
-        - REACT_APP_USERS_SERVICE_URL=${REACT_APP_USERS_SERVICE_URL}
+        - REACT_APP_USERS_SERVICE_URL=http://builds.mini-super.com
     ports:
       - '3007:80'
     depends_on:
@@ -50,3 +52,7 @@ services:
     depends_on:
       - users
       - client
+
+volumes:
+  npm-cache:
+    external: false

@@ -3,22 +3,27 @@
 ###########
 
 # base image
-FROM node:10.13.0-alpine as builder
+FROM node:10.14.0-alpine as builder
 
 # set working directory
 WORKDIR /usr/src/app
 
-# insall app dependencies
-ENV PATH /usr/src/app/node_modules/.bin:$PATH
-COPY package.json /usr/src/app/package.json
-RUN npm install --silent
-RUN npm install react-scripts@latest -g --silent
-
 # set environment variables
+# ENV NODE_ENV development
+ENV PATH /usr/src/app/node_modules/.bin:$PATH
+
 ARG REACT_APP_USERS_SERVICE_URL
 ENV REACT_APP_USERS_SERVICE_URL $REACT_APP_USERS_SERVICE_URL
 ARG NODE_ENV
 ENV NODE_ENV $NODE_ENV
+
+# insall app dependencies
+COPY package.json /usr/src/app/package.json
+RUN cd /usr/src/app && \
+    npm set progress=false && \
+    npm config set depth 0 && \
+    npm install --silent && \
+    npm install --silent react-scripts@latest
 
 # create build
 COPY . /usr/src/app
