@@ -36,7 +36,7 @@ services:
       dockerfile: Dockerfile-prod
       args:
         - NODE_ENV=production
-        - REACT_APP_USERS_SERVICE_URL=http://builds.mini-super.com
+        - REACT_APP_USERS_SERVICE_URL=http://ec2-35-165-167-88.us-west-2.compute.amazonaws.com
     ports:
       - '3007:80'
     depends_on:
@@ -46,7 +46,7 @@ services:
     build:
       context: ./services/nginx
       dockerfile: Dockerfile-prod
-    restart: always
+    restart: 'no'
     ports:
       - 80:80
     depends_on:
