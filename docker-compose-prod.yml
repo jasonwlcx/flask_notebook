@@ -13,7 +13,7 @@ services:
       - APP_SETTINGS=project.config.ProductionConfig
       - DATABASE_URL=postgres://postgres:postgres@users-db:5432/users_prod  
       - DATABASE_TEST_URL=postgres://postgres:postgres@users-db:5432/users_test  
-      - SECRET_KEY=secret_key
+      - SECRET_KEY=${SECRET_KEY}
     depends_on:  
       - users-db
 
@@ -21,24 +21,22 @@ services:
     build:
       context: ./services/users/project/db
       dockerfile: Dockerfile
-    ports:
-      - 5435:5432
+    expose:
+      - 5432
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
 
   client:
-    volumes:
-      - npm-cache:/root/.npm
     container_name: client
     build:
       context: ./services/client
       dockerfile: Dockerfile-prod
       args:
         - NODE_ENV=production
-        - REACT_APP_USERS_SERVICE_URL=http://ec2-35-165-167-88.us-west-2.compute.amazonaws.com
-    ports:
-      - '3007:80'
+        - REACT_APP_USERS_SERVICE_URL=${REACT_APP_USERS_SERVICE_URL}
+    expose:
+      - 80
     depends_on:
       - users
 
@@ -53,6 +51,3 @@ services:
       - users
       - client
 
-volumes:
-  npm-cache:
-    external: false
