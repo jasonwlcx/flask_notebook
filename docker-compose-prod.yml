@@ -51,3 +51,14 @@ services:
       - users
       - client
 
+  swagger:
+    build:
+      context: ./services/swagger
+      dockerfile: Dockerfile-prod
+    expose:
+      - 8083
+    environment:
+      - URL=swagger.json
+    depends_on:
+      - users
+

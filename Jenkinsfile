@@ -43,17 +43,17 @@ pipeline {
           stage ('Archive') {
               environment {
                 DOCKER_CONFIG="${JENKINS_HOME}/.docker"
+                REACT_APP_USERS_SERVICE_URL="http://mini-glaven-212005268.us-west-2.elb.amazonaws.com"
+
               }
               steps {
                 sh """
-                    docker tag flask_notebook_nginx:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:nginx_"${BUILD_TAG}"
-                    docker tag flask_notebook_client:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:client_"${BUILD_TAG}"
-                    docker tag flask_notebook_users:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:users_"${BUILD_TAG}"
-                    docker tag flask_notebook_users-db:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:users-db_"${BUILD_TAG}"
-                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:nginx_"${BUILD_TAG}"
-                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:client_"${BUILD_TAG}"
-                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:users_"${BUILD_TAG}"
-                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:users-db_"${BUILD_TAG}"
+                    docker tag flask_notebook_client:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_client:production
+                    docker tag flask_notebook_users:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users:production
+                    docker tag flask_notebook_swagger:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_swagger:production
+                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_client:production
+                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users:production
+                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_swagger:production
                 """
               }
     	    }

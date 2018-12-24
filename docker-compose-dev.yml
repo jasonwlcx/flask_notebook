@@ -44,11 +44,24 @@ services:
     depends_on:
       - users
 
+  swagger:
+    build:
+      context: ./services/swagger
+      dockerfile: Dockerfile-dev
+    volumes:
+      - './services/swagger/swagger.json:/usr/share/nginx/html/swagger.json'
+    ports:
+      - 3008:8083
+    environment:
+      - URL=swagger.json
+    depends_on:
+      - users
+
   nginx:
     build:
       context: ./services/nginx
       dockerfile: Dockerfile-dev
-    restart: always
+    restart: "no"
     ports:
       - 80:80
     depends_on:
