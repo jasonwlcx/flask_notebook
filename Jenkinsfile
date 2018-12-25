@@ -33,8 +33,7 @@ pipeline {
                   sh """
                     docker-compose -f docker-compose-prod.yml rm -f && \
                     docker-compose -f docker-compose-prod.yml pull --include-deps && \
-                    docker-compose -f docker-compose-prod.yml up --build -d --build-arg
-REACT_APP_USERS_SERVICE_URL=$REACT_APP_USERS_SERVICE_URL --build-arg SECRET_KEY=$SECRET_KEY
+                    docker-compose -f docker-compose-prod.yml up --build -d
                   """
               }
           } // end of Build Stage
