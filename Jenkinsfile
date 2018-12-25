@@ -27,17 +27,22 @@ pipeline {
               environment {
                 DOCKER_ENV="prod"
                 SECRET_KEY="secret_key"
-                REACT_APP_USERS_SERVICE_URL="http://mini-glaven-212005268.us-west-2.elb.amazonaws.com"
+                REACT_APP_USERS_SERVICE_URL="http://mini-glaven-alb-1593180345.us-west-2.elb.amazonaws.com"
               }
               steps {
                   sh """
                     docker-compose -f docker-compose-prod.yml rm -f && \
                     docker-compose -f docker-compose-prod.yml pull --include-deps && \
-                    docker-compose -f docker-compose-prod.yml up --build -d
+                    docker-compose -f docker-compose-prod.yml up --build -d --build-arg
+REACT_APP_USERS_SERVICE_URL=$REACT_APP_USERS_SERVICE_URL --build-arg SECRET_KEY=$SECRET_KEY
                   """
               }
           } // end of Build Stage
           stage ('Test') {
+              environment {
+                SECRET_KEY="secret_key"
+                REACT_APP_USERS_SERVICE_URL="http://localhost"
+              }
               steps {
                 sh """
                     docker-compose -f docker-compose-prod.yml run users python manage.py test
