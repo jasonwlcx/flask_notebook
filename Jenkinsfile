@@ -68,7 +68,7 @@ pipeline {
     	    }
     	  stage ( 'Cleanup') {
     	      steps {
-                sh """docker_cleanup_rmi.sh"""
+                sh """${JENKINS_HOME}/docker_cleanup_rmi.sh"""
               }
     	  }
        } // end stages
