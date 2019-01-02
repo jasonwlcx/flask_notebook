@@ -70,9 +70,11 @@ pipeline {
        post {
             success {
                 setBuildStatus("Build complete", "SUCCESS");
+                sh """docker_cleanup_rmi.sh"""
             }
             failure {
                 setBuildStatus("Build failed", "FAILURE");
+                sh """docker_cleanup_rmi.sh"""
             }
         } // end post
 } // end pipeline
