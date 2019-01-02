@@ -68,7 +68,9 @@ pipeline {
     	    }
     	  stage ( 'Cleanup') {
     	      steps {
-                sh """${JENKINS_HOME}/docker_cleanup_rmi.sh"""
+                sh """docker-compose -f docker-compose-prod.yml down && \
+                ${JENKINS_HOME}/docker_cleanup_rmi.sh
+                """
               }
     	  }
        } // end stages
