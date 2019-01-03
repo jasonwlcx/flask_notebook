@@ -26,13 +26,14 @@ pipeline {
     	    stage ('Build') {
               environment {
                 def props = readProperties  interpolate: true, file: "${JENKINS_HOME}/project.properties"
-                DOCKER_ENV="${props.DOCKER_ENV}"
-                SECRET_KEY="${props.SECRET_KEY}"
-                REACT_APP_USERS_SERVICE_URL="${props.REACT_APP_USERS_SERVICE_URL}"
-                DATABASE_URL="${props.AWS_RDS_URI}"
+                DOCKER_ENV="${DOCKER_ENV}"
+                SECRET_KEY="${SECRET_KEY}"
+                REACT_APP_USERS_SERVICE_URL="${REACT_APP_USERS_SERVICE_URL}"
+                DATABASE_URL="${AWS_RDS_URI}"
               }
               steps {
                   sh """
+                    echo "${DATABASE_URL}"
                     docker-compose -f docker-compose-prod.yml rm -f && \
                     docker-compose -f docker-compose-prod.yml pull --include-deps && \
                     docker-compose -f docker-compose-prod.yml up --build -d
@@ -41,7 +42,7 @@ pipeline {
           } // end of Build Stage
           stage ('Test') {
               environment {
-                SECRET_KEY="${props.SECRET_KEY}"
+                SECRET_KEY="secret_key"
                 REACT_APP_USERS_SERVICE_URL="http://localhost"
               }
               steps {
