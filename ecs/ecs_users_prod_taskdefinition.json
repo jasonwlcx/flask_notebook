@@ -1,0 +1,76 @@
+{
+"containerDefinitions": [
+  {
+    "name": "users",
+    "image": "104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users:production",
+    "essential": true,
+    "memoryReservation": 300,
+    "portMappings": [
+      {
+        "hostPort": 0,
+        "protocol": "tcp",
+        "containerPort": 5000
+      }
+    ],
+    "environment": [
+      {
+        "name": "APP_SETTINGS",
+        "value": "project.config.ProductionConfig"
+      },
+      {
+        "name": "DATABASE_TEST_URL",
+        "value": "postgres://postgres:postgres@users-db:5432/users_test"
+      },
+      {
+        "name": "DATABASE_URL",
+        "value": "postgres://postgres:postgres@users-db:5432/users_prod"
+      },
+      {
+        "name": "SECRET_KEY",
+        "value": "secret_key"
+      }
+    ],
+    "links": [
+      "users-db"
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "mini-glaven-users-prod",
+        "awslogs-region": "us-west-2"
+      }
+    }
+  },
+  {
+    "name": "users-db",
+    "image": "104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users-db:production",
+    "essential": true,
+    "memoryReservation": 300,
+    "portMappings": [
+      {
+        "hostPort": 0,
+        "protocol": "tcp",
+        "containerPort": 5432
+      }
+    ],
+    "environment": [
+      {
+        "name": "POSTGRES_PASSWORD",
+        "value": "postgres"
+      },
+      {
+        "name": "POSTGRES_USER",
+        "value": "postgres"
+      }
+    ],
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "mini-glaven-users-db-prod",
+        "awslogs-region": "us-west-2"
+      }
+    }
+  }
+],
+"family": "mini-glaven-client-users-td"
+}

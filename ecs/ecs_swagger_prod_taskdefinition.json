@@ -1,0 +1,32 @@
+{
+"containerDefinitions": [
+  {
+    "name": "swagger",
+    "image": "104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_swagger:production",
+    "essential": true,
+
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-group": "mini-glaven-swagger-prod",
+        "awslogs-region": "us-west-2"
+      }
+    },
+    "portMappings": [
+      {
+        "hostPort": 0,
+        "protocol": "tcp",
+        "containerPort": 8080
+      }
+    ],
+    "environment": [
+      {
+        "name": "URL",
+        "value": "swagger.json"
+      }
+    ],
+    "memoryReservation": 300
+  }
+],
+"family": "mini-glaven-client-swagger-td"
+}

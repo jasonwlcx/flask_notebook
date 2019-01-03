@@ -1,7 +1,9 @@
+def props = readProperties  interpolate: true, file: ${JENKINS_HOME}/project.properties'
+
 void setBuildStatus(String message, String state) {
   step([
       $class: "GitHubCommitStatusSetter",
-      reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/jasonwlcx/flask_notebook"],
+      reposSource: [$class: "ManuallyEnteredRepositorySource", url: "props.SCM_URL"],
       contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "continuous-integration/jenkins"],
       errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
       statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
@@ -20,14 +22,14 @@ pipeline {
      	            submoduleCfg: [], 
      	            userRemoteConfigs: [
      	                [credentialsId: 'edf6ddc3-92f1-496c-b829-b490b2743a51', 
-     	                url: 'https://github.com/jasonwlcx/flask_notebook/']]])
+     	                url: "props.SCM_URL"]]])
              }
           } // end of Checkout Stage
     	    stage ('Build') {
               environment {
-                DOCKER_ENV="prod"
-                SECRET_KEY="secret_key"
-                REACT_APP_USERS_SERVICE_URL="http://mini-glaven-alb-1593180345.us-west-2.elb.amazonaws.com"
+                DOCKER_ENV="props.DOCKER_ENV"
+                SECRET_KEY="props.SECRET_KEY"
+                REACT_APP_USERS_SERVICE_URL="props.REACT_APP_USERS_SERVICE_URL"
               }
               steps {
                   sh """

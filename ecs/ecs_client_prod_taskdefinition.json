@@ -2,7 +2,7 @@
   "containerDefinitions": [
     {
       "name": "client",
-      "image": "%s.dkr.ecr.us-east-1.amazonaws.com/test-driven-client:staging",
+      "image": "104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_client:production",
       "essential": true,
       "memoryReservation": 300,
       "portMappings": [
@@ -15,11 +15,11 @@
       "logConfiguration": {
         "logDriver": "awslogs",
         "options": {
-          "awslogs-group": "testdriven-client-prod",
-          "awslogs-region": "us-east-1"
+          "awslogs-group": "mini-glaven-client-prod",
+          "awslogs-region": "us-west-2"
         }
       }
     }
   ],
-  "family": "testdriven-client-prod-td"
+  "family": "mini-glaven-client-prod-td"
 }
