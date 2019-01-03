@@ -16,7 +16,7 @@
       {
         "hostPort": 0,
         "protocol": "tcp",
-        "containerPort": 8080
+        "containerPort": 8083
       }
     ],
     "environment": [
