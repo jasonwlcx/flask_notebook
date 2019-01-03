@@ -84,7 +84,7 @@ pipeline {
                 DATABASE_URL="${props.AWS_RDS_URI}"
               }
     	      steps {
-                sh """docker-deploy-prod.sh"""
+                sh """ ${WORKSPACE}/docker-deploy-prod.sh """
               }
     	  }
        } // end stages
