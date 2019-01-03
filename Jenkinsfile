@@ -29,7 +29,7 @@ pipeline {
                 DOCKER_ENV="${DOCKER_ENV}"
                 SECRET_KEY="${SECRET_KEY}"
                 REACT_APP_USERS_SERVICE_URL="${REACT_APP_USERS_SERVICE_URL}"
-                DATABASE_URL="${AWS_RDS_URI}"
+                DATABASE_URL="${props.AWS_RDS_URI}"
               }
               steps {
                   sh """
