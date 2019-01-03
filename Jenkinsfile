@@ -26,7 +26,7 @@ pipeline {
     	    stage ('Build') {
               environment {
                 def props = readProperties  interpolate: true, file: "${JENKINS_HOME}/project.properties"
-                DOCKER_ENV=props.DOCKER_ENV
+                DOCKER_ENV="${props.DOCKER_ENV}"
                 SECRET_KEY=props.SECRET_KEY
                 REACT_APP_USERS_SERVICE_URL=props.REACT_APP_USERS_SERVICE_URL
                 DATABASE_URL=props.AWS_RDS_URI
