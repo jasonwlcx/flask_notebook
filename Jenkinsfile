@@ -11,7 +11,6 @@ void setBuildStatus(String message, String state) {
 pipeline {
    agent any
        stages {
-        def props = readProperties  interpolate: true, file: "${JENKINS_HOME}/project.properties"
           stage ('Checkout') {
              steps {
                checkout([$class: 'GitSCM', 
@@ -26,9 +25,11 @@ pipeline {
           } // end of Checkout Stage
     	    stage ('Build') {
               environment {
-                DOCKER_ENV="prod"
-                SECRET_KEY="secret_key"
-                REACT_APP_USERS_SERVICE_URL="http://mini-glaven-alb-1593180345.us-west-2.elb.amazonaws.com"
+                def props = readProperties  interpolate: true, file: "${JENKINS_HOME}/project.properties"
+                DOCKER_ENV=props.DOCKER_ENV
+                SECRET_KEY=props.SECRET_KEY
+                REACT_APP_USERS_SERVICE_URL=props.REACT_APP_USERS_SERVICE_URL
+                DATABASE_URL=props.AWS_RDS_URI
               }
               steps {
                   sh """
