@@ -2,7 +2,7 @@
 "containerDefinitions": [
   {
     "name": "swagger",
-    "image": "104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_swagger:production",
+    "image": "%s.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_swagger:production",
     "essential": true,
 
     "logConfiguration": {

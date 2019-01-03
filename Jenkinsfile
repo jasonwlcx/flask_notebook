@@ -76,6 +76,17 @@ pipeline {
                 """
               }
     	  }
+    	  stage ( 'Deploy') {
+              environment {
+                def props = readProperties  interpolate: true, file: "${JENKINS_HOME}/project.properties"
+                AWS_ACCOUNT_ID="${props.AWS_ACCOUNT_ID}"
+                SECRET_KEY="${props.SECRET_KEY}"
+                DATABASE_URL="${props.AWS_RDS_URI}"
+              }
+    	      steps {
+                sh """docker-deploy-prod.sh"""
+              }
+    	  }
        } // end stages
        post {
             success {
