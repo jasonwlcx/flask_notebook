@@ -1,4 +1,4 @@
-def props = readProperties  interpolate: true, file: ${JENKINS_HOME}/project.properties'
+def props = readProperties  interpolate: true, file: ${JENKINS_HOME}/project.properties
 
 void setBuildStatus(String message, String state) {
   step([
