@@ -7,10 +7,10 @@ void setBuildStatus(String message, String state) {
       statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
   ]);
 }
-def props = readProperties  interpolate: true, file: "${JENKINS_HOME}/project.properties"
 
 pipeline {
    agent any
+    def props = readProperties  interpolate: true, file: "${JENKINS_HOME}/project.properties"
        stages {
           stage ('Checkout') {
              steps {
