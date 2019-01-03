@@ -10,8 +10,8 @@ void setBuildStatus(String message, String state) {
 
 pipeline {
    agent any
-    def props = readProperties  interpolate: true, file: "${JENKINS_HOME}/project.properties"
        stages {
+        def props = readProperties  interpolate: true, file: "${JENKINS_HOME}/project.properties"
           stage ('Checkout') {
              steps {
                checkout([$class: 'GitSCM', 
