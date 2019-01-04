@@ -28,6 +28,7 @@
         aws autoscaling update-auto-scaling-group --auto-scaling-group-name $autoScalingGroup --min-size 1
       else
         echo "Register with existing container instance"
+        aws autoscaling update-auto-scaling-group --auto-scaling-group-name $autoScalingGroup --min-size 1
       fi
 
 
