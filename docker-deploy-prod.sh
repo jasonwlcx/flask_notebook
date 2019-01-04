@@ -23,12 +23,11 @@
       cluster="mini-glaven-prod-cluster"
       autoScalingGroup="EC2ContainerService-mini-glaven-prod-cluster-EcsInstanceAsg-8JG3QK6IZVQ"
 
-      if [[ $(aws ecs describe-clusters --cluster $cluster | jq -r '.clusters | .[] | .registeredContainerInstancesCount') < 1 ]]; then
+      if [[ $(aws ecs describe-clusters --cluster $cluster | $JQ '.clusters | .[] | .registeredContainerInstancesCount') < 1 ]]; then
         echo "Container instance not present, scaling to 1"
         aws autoscaling update-auto-scaling-group --auto-scaling-group-name $autoScalingGroup --min-size 1 --max-size 1
       else
-        echo "Register with existing container instance"
-        aws autoscaling update-auto-scaling-group --auto-scaling-group-name $autoScalingGroup --min-size 1 --max-size 1
+        echo "Deploy to existing container instance"
       fi
 
 
