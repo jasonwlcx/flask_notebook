@@ -32,7 +32,7 @@ pipeline {
                 DATABASE_URL="${props.AWS_RDS_URI}"
               }
               steps {
-                  bash """
+                  sh """
                     docker-compose -f docker-compose-prod.yml rm -f && \
                     docker-compose -f docker-compose-prod.yml pull --include-deps && \
                     docker-compose -f docker-compose-prod.yml up --build -d
@@ -46,7 +46,7 @@ pipeline {
                 REACT_APP_USERS_SERVICE_URL="http://localhost"
               }
               steps {
-                bash """
+                sh """
                     docker-compose -f docker-compose-prod.yml run users python manage.py test
                     docker-compose -f docker-compose-prod.yml run users flake8 project
                 """
@@ -57,7 +57,7 @@ pipeline {
                 DOCKER_CONFIG="${JENKINS_HOME}/.docker"
               }
               steps {
-                bash """
+                sh """
                     docker tag flask_notebook_client:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_client:production
                     docker tag flask_notebook_users:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users:production
                     docker tag flask_notebook_users-db:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users-db:production
@@ -71,7 +71,7 @@ pipeline {
     	  } // end Archive Stage
     	  stage ( 'Cleanup') {
     	      steps {
-                bash """docker-compose -f docker-compose-prod.yml down && \
+                sh """docker-compose -f docker-compose-prod.yml down && \
                 ${JENKINS_HOME}/docker_cleanup_rmi.sh
                 """
               }
@@ -84,7 +84,7 @@ pipeline {
                 DATABASE_URL="${props.AWS_RDS_URI}"
               }
     	      steps {
-                bash """ ${WORKSPACE}/docker-deploy-prod.sh """
+                sh """ ${WORKSPACE}/docker-deploy-prod.sh """
               }
     	  } // end Cleanup Stage
        } // end Stages
