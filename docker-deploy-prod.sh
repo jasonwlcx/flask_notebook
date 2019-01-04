@@ -25,10 +25,10 @@
 
       if [[ $(aws ecs describe-clusters --cluster $cluster | jq -r '.clusters | .[] | .registeredContainerInstancesCount') < 1 ]]; then
         echo "Container instance not present, scaling to 1"
-        aws autoscaling update-auto-scaling-group --auto-scaling-group-name $autoScalingGroup --min-size 1
+        aws autoscaling update-auto-scaling-group --auto-scaling-group-name $autoScalingGroup --min-size 1 --max-size 1
       else
         echo "Register with existing container instance"
-        aws autoscaling update-auto-scaling-group --auto-scaling-group-name $autoScalingGroup --min-size 1
+        aws autoscaling update-auto-scaling-group --auto-scaling-group-name $autoScalingGroup --min-size 1 --max-size 1
       fi
 
 
