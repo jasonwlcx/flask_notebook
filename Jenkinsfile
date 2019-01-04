@@ -22,8 +22,8 @@ pipeline {
      	                [credentialsId: 'edf6ddc3-92f1-496c-b829-b490b2743a51', 
      	                url: 'https://github.com/jasonwlcx/flask_notebook/']]])
              }
-          } // end of Checkout Stage
-    	    stage ('Build') {
+          } // end Checkout Stage
+    	  stage ('Build') {
               environment {
                 def props = readProperties  interpolate: true, file: "${JENKINS_HOME}/project.properties"
                 DOCKER_ENV="${props.DOCKER_ENV}"
@@ -33,16 +33,16 @@ pipeline {
               }
               steps {
                   sh """
-                    echo "${DATABASE_URL}"
                     docker-compose -f docker-compose-prod.yml rm -f && \
                     docker-compose -f docker-compose-prod.yml pull --include-deps && \
                     docker-compose -f docker-compose-prod.yml up --build -d
                   """
               }
-          } // end of Build Stage
+          } // end Build Stage
           stage ('Test') {
               environment {
-                SECRET_KEY="secret_key"
+                def props = readProperties  interpolate: true, file: "${JENKINS_HOME}/project.properties"
+                SECRET_KEY="${props.SECRET_KEY}"
                 REACT_APP_USERS_SERVICE_URL="http://localhost"
               }
               steps {
@@ -68,14 +68,14 @@ pipeline {
                     docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_swagger:production
                 """
               }
-    	    }
+    	  } // end Archive Stage
     	  stage ( 'Cleanup') {
     	      steps {
                 sh """docker-compose -f docker-compose-prod.yml down && \
                 ${JENKINS_HOME}/docker_cleanup_rmi.sh
                 """
               }
-    	  }
+    	  } // end Cleanup Stage
     	  stage ( 'Deploy') {
               environment {
                 def props = readProperties  interpolate: true, file: "${JENKINS_HOME}/project.properties"
@@ -86,8 +86,8 @@ pipeline {
     	      steps {
                 sh """ ${WORKSPACE}/docker-deploy-prod.sh """
               }
-    	  }
-       } // end stages
+    	  } // end Cleanup Stage
+       } // end Stages
        post {
             success {
                 setBuildStatus("Build complete", "SUCCESS");
@@ -95,5 +95,5 @@ pipeline {
             failure {
                 setBuildStatus("Build failed", "FAILURE");
             }
-        } // end post
-} // end pipeline
+        } // end Post Actions
+} // end Pipeline

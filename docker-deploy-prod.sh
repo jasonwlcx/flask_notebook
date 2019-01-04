@@ -12,7 +12,7 @@
     }
 
     update_service() {
-      if [[ $(aws ecs update-service --cluster $cluster --service $service --task-definition $revision | $JQ '.service.taskDefinition') != $revision ]]; then
+      if [[ $(aws ecs update-service --cluster $cluster --service $service --desiredCount 1 --task-definition $revision | $JQ '.service.taskDefinition') != $revision ]]; then
         echo "Error updating service."
         return 1
       fi
@@ -21,6 +21,14 @@
     deploy_cluster() {
 
       cluster="mini-glaven-prod-cluster"
+
+      if [[ $(aws ecs describe-clusters --cluster $cluster | jq -r '.clusters | .[] | .registeredContainerInstancesCount') -lt 1 ]]; then
+        echo "Container instance not present, scaling to 1"
+        aws ecs register-container-instance --cluster mini-glaven-prod-cluster
+      else
+        echo "Register with existing container instance"
+      fi
+
 
       # users
       service="mini-glaven-users-prod-service"
