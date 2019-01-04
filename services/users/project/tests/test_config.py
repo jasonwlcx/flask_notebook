@@ -25,6 +25,9 @@ class TestDevelopmentConfig(TestCase):
             os.environ.get('DATABASE_URL')
         )
         self.assertTrue(app.config['DEBUG_TB_ENABLED'])
+        self.assertTrue(app.config['BCRYPT_LOG_ROUNDS'] == 4)
+        self.assertTrue(app.config['TOKEN_EXPIRATION_DAYS'] == 30)
+        self.assertTrue(app.config['TOKEN_EXPIRATION_SECONDS'] == 0)
 
 
 class TestTestingConfig(TestCase):
@@ -41,6 +44,9 @@ class TestTestingConfig(TestCase):
             os.environ.get('DATABASE_TEST_URL')
         )
         self.assertFalse(app.config['DEBUG_TB_ENABLED'])
+        self.assertTrue(app.config['BCRYPT_LOG_ROUNDS'] == 4)
+        self.assertTrue(app.config['TOKEN_EXPIRATION_DAYS'] == 0)
+        self.assertTrue(app.config['TOKEN_EXPIRATION_SECONDS'] == 3)
 
 
 class TestProductionConfig(TestCase):
@@ -52,6 +58,9 @@ class TestProductionConfig(TestCase):
         self.assertTrue(app.config['SECRET_KEY'] == 'secret_key')
         self.assertFalse(app.config['TESTING'])
         self.assertFalse(app.config['DEBUG_TB_ENABLED'])
+        self.assertTrue(app.config['BCRYPT_LOG_ROUNDS'] == 13)
+        self.assertTrue(app.config['TOKEN_EXPIRATION_DAYS'] == 30)
+        self.assertTrue(app.config['TOKEN_EXPIRATION_SECONDS'] == 0)
 
 
 if __name__ == '__main__':

@@ -57,11 +57,13 @@ def cov():
 def seed_db():
     db.session.add(User(
         username='jasonwlcx',
-        email='jasonwlcx@mini-super.com'
+        email='jasonwlcx@mini-super.com',
+        password='miniglaven',
     ))
     db.session.add(User(
         username='glaven',
-        email='glaven@mini-super.com'
+        email='glaven@mini-super.com',
+        password='glaven'
     ))
     db.session.commit()
 

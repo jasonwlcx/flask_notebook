@@ -1,7 +1,7 @@
 void setBuildStatus(String message, String state) {
   step([
       $class: "GitHubCommitStatusSetter",
-      reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/jasonwlcx/flask_notebook"],
+      reposSource: [$class: "ManuallyEnteredRepositorySource", url: "https://github.com/jasonwlcx/flask_notebook/"],
       contextSource: [$class: "ManuallyEnteredCommitContextSource", context: "continuous-integration/jenkins"],
       errorHandlers: [[$class: "ChangingBuildStatusErrorHandler", result: "UNSTABLE"]],
       statusResultSource: [ $class: "ConditionalStatusResultSource", results: [[$class: "AnyBuildResult", message: message, state: state]] ]
@@ -22,8 +22,15 @@ pipeline {
      	                [credentialsId: 'edf6ddc3-92f1-496c-b829-b490b2743a51', 
      	                url: 'https://github.com/jasonwlcx/flask_notebook/']]])
              }
-          } // end of Checkout Stage
-    	    stage ('Build') {
+          } // end Checkout Stage
+    	  stage ('Build') {
+              environment {
+                def props = readProperties  interpolate: true, file: "${JENKINS_HOME}/project.properties"
+                DOCKER_ENV="${props.DOCKER_ENV}"
+                SECRET_KEY="${props.SECRET_KEY}"
+                REACT_APP_USERS_SERVICE_URL="${props.REACT_APP_USERS_SERVICE_URL}"
+                DATABASE_URL="${props.AWS_RDS_URI}"
+              }
               steps {
                   sh """
                     docker-compose -f docker-compose-prod.yml rm -f && \
@@ -31,8 +38,13 @@ pipeline {
                     docker-compose -f docker-compose-prod.yml up --build -d
                   """
               }
-          } // end of Build Stage
+          } // end Build Stage
           stage ('Test') {
+              environment {
+                def props = readProperties  interpolate: true, file: "${JENKINS_HOME}/project.properties"
+                SECRET_KEY="${props.SECRET_KEY}"
+                REACT_APP_USERS_SERVICE_URL="http://localhost"
+              }
               steps {
                 sh """
                     docker-compose -f docker-compose-prod.yml run users python manage.py test
@@ -46,26 +58,36 @@ pipeline {
               }
               steps {
                 sh """
-                    docker tag python:3.6.5-alpine 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:python3.6.5-alpine_"${BUILD_TAG}"
-                    docker tag postgres:10.4-alpine 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:postgres10.4-alpine_"${BUILD_TAG}"
-                    docker tag nginx:1.15.0-alpine 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:nginx1.15.0-alpine_"${BUILD_TAG}"
-                    docker tag node:10.14.0-alpine 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:node10.14.0-alpine_"${BUILD_TAG}"
-                    docker tag flask_notebook_nginx:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:nginx_"${BUILD_TAG}"
-                    docker tag flask_notebook_client:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:client_"${BUILD_TAG}"
-                    docker tag flask_notebook_users:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:users_"${BUILD_TAG}"
-                    docker tag flask_notebook_users-db:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:users-db_"${BUILD_TAG}"
-                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:nginx_"${BUILD_TAG}"
-                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:client_"${BUILD_TAG}"
-                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:users_"${BUILD_TAG}"
-                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:users-db_"${BUILD_TAG}"
-                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:python3.6.5-alpine_"${BUILD_TAG}"
-                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:postgres10.4-alpine_"${BUILD_TAG}"
-                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:nginx1.15.0-alpine_"${BUILD_TAG}"
-                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook:node10.14.0-alpine_"${BUILD_TAG}"
+                    docker tag flask_notebook_client:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_client:production
+                    docker tag flask_notebook_users:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users:production
+                    docker tag flask_notebook_users-db:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users-db:production
+                    docker tag flask_notebook_swagger:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_swagger:production
+                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_client:production
+                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users:production
+                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users-db:production
+                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_swagger:production
                 """
               }
-    	    }
-       } // end stages
+    	  } // end Archive Stage
+    	  stage ( 'Cleanup') {
+    	      steps {
+                sh """docker-compose -f docker-compose-prod.yml down && \
+                ${JENKINS_HOME}/docker_cleanup_rmi.sh
+                """
+              }
+    	  } // end Cleanup Stage
+    	  stage ( 'Deploy') {
+              environment {
+                def props = readProperties  interpolate: true, file: "${JENKINS_HOME}/project.properties"
+                AWS_ACCOUNT_ID="${props.AWS_ACCOUNT_ID}"
+                SECRET_KEY="${props.SECRET_KEY}"
+                DATABASE_URL="${props.AWS_RDS_URI}"
+              }
+    	      steps {
+                sh """ ${WORKSPACE}/docker-deploy-prod.sh """
+              }
+    	  } // end Cleanup Stage
+       } // end Stages
        post {
             success {
                 setBuildStatus("Build complete", "SUCCESS");
@@ -73,5 +95,5 @@ pipeline {
             failure {
                 setBuildStatus("Build failed", "FAILURE");
             }
-        } // end post
-} // end pipeline
+        } // end Post Actions
+} // end Pipeline
