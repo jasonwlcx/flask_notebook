@@ -35,7 +35,7 @@
       service="mini-glaven-users-prod-service"
       template="ecs_users_prod_taskdefinition.json"
       task_template=$(cat "ecs/$template")
-      task_def=$(printf "$task_template" $AWS_ACCOUNT_ID $BUILD_TAG $DATABASE_URL $SECRET_KEY)
+      task_def=$(printf "$task_template" $AWS_ACCOUNT_ID $DATABASE_URL $SECRET_KEY)
       echo "$task_def"
       register_definition
       update_service
@@ -44,7 +44,7 @@
       service="mini-glaven-client-prod-service"
       template="ecs_client_prod_taskdefinition.json"
       task_template=$(cat "ecs/$template")
-      task_def=$(printf "$task_template" $AWS_ACCOUNT_ID $BUILD_TAG)
+      task_def=$(printf "$task_template" $AWS_ACCOUNT_ID)
       echo "$task_def"
       register_definition
       update_service
@@ -53,7 +53,7 @@
       service="mini-glaven-swagger-prod-service"
       template="ecs_swagger_prod_taskdefinition.json"
       task_template=$(cat "ecs/$template")
-      task_def=$(printf "$task_template" $AWS_ACCOUNT_ID $BUILD_TAG)
+      task_def=$(printf "$task_template" $AWS_ACCOUNT_ID)
       echo "$task_def"
       register_definition
       update_service

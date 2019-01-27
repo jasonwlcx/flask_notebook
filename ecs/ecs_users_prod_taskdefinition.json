@@ -2,7 +2,7 @@
 "containerDefinitions": [
   {
     "name": "users",
-    "image": "%s.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users%s:production",
+    "image": "%s.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users:production",
     "essential": true,
     "memoryReservation": 300,
     "portMappings": [
