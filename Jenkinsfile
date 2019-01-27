@@ -55,17 +55,19 @@ pipeline {
           stage ('Archive') {
               environment {
                 DOCKER_CONFIG="${JENKINS_HOME}/.docker"
+                def props = readProperties  interpolate: true, file: "${JENKINS_HOME}/project.properties"
+                AWS_ACCOUNT_ID="${props.AWS_ACCOUNT_ID}"
               }
               steps {
                 sh """
-                    docker tag flask_notebook_client:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_client:production
-                    docker tag flask_notebook_users:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users:production
-                    docker tag flask_notebook_users-db:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users-db:production
-                    docker tag flask_notebook_swagger:latest 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_swagger:production
-                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_client:production
-                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users:production
-                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users-db:production
-                    docker push 104352192622.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_swagger:production
+                    docker tag flask_notebook_client:latest ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_client"${BUILD_TAG}":production
+                    docker tag flask_notebook_users:latest ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users"${BUILD_TAG}":production
+                    docker tag flask_notebook_users-db:latest ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users-db"${BUILD_TAG}":production
+                    docker tag flask_notebook_swagger:latest ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_swagger"${BUILD_TAG}":production
+                    docker push ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_client:production
+                    docker push ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users:production
+                    docker push ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users-db:production
+                    docker push ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_swagger:production
                 """
               }
     	  } // end Archive Stage
