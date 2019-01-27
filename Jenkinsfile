@@ -64,10 +64,10 @@ pipeline {
                     docker tag flask_notebook_users:latest ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users_"${BUILD_TAG}":production
                     docker tag flask_notebook_users-db:latest ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users-db_"${BUILD_TAG}":production
                     docker tag flask_notebook_swagger:latest ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_swagger_"${BUILD_TAG}":production
-                    docker push ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_client_"${BUILD_TAG}":production
-                    docker push ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_user_"${BUILD_TAG}"s:production
-                    docker push ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users-db_"${BUILD_TAG}":production
-                    docker push ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_swagger_"${BUILD_TAG}":production
+                    docker push ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_client:production
+                    docker push ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users:production
+                    docker push ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_users-db:production
+                    docker push ${AWS_ACCOUNT_ID}.dkr.ecr.us-west-2.amazonaws.com/flask_notebook_swagger:production
                 """
               }
     	  } // end Archive Stage
